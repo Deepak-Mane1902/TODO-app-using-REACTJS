@@ -1,101 +1,82 @@
-import Image from "next/image";
+'use client'
+import React, { useState } from 'react'
 
-export default function Home() {
+const page = () => {
+
+    const [title,settitle] = useState("")
+    const [desc,setdesc] = useState("")
+    const [mainTask,setmainTask] = useState([])
+    const submitHandler =(e)=>{
+      e.preventDefault();
+      setmainTask([...mainTask, {title,desc}]);
+      setdesc("")
+      settitle("")
+      console.log(mainTask);
+    }
+    const deleteHandler =(i)=>{
+      let copyTask = [...mainTask]
+      copyTask.splice(i,1);
+      setmainTask(copyTask)
+    }
+
+    let renderTask = <h2 className='text-center'>No Task Available</h2>
+  if(mainTask.length>0){
+    renderTask=mainTask.map((t,i)=>{
+      return (
+        <li key={i} className='flex justify-between pl-25 text-[2vw] mb-[5vw]'>
+        <div className="flex flex-row m-[20px] justify-between">
+        <h5 className='text-[2vw] font-bold ml-[10vw] '>{t.title}</h5>
+        <p className='text-[2vw] font-bold ml-[40vw]'>{t.desc}</p>
+      </div>
+        <button className='mr-[17vw] bg-blue-300 pl-[2vw] pr-[2vw] hover:bg-blue-600 p-[10px]'
+        onClick={()=>{
+          deleteHandler(i)
+        }}
+        >Delete</button>
+        </li>
+      );
+    });
+  }
+
+  
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <>
+    <h1 className='bg-black p-5 text-[3vw] font-bold text-center text-white'>My Todo List</h1>
+    <form onSubmit={submitHandler}>
+      <input placeholder='Enter the name : ' className='
+      mt-[5vw] w-[30vw] h-[5vw]
+      ml-[8vw] text-2xl pl-[20px]  text-left border-4 rounded border-red-700'
+      value={title}
+      onChange={(e)=>{
+        e.preventDefault();
+        settitle(e.target.value)
+      }}
+      />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      <input placeholder='Enter the name : ' className='
+      mt-[5vw] w-[30vw] h-[5vw]
+      ml-[1vw] text-2xl pl-[20px]  text-left border-4 rounded border-red-700'
+      value={desc}
+      onChange={(e)=>{
+        e.preventDefault();
+        setdesc(e.target.value)
+      }}
+      />
+
+      <button className='bg-red-400 p-[1.8vw] ml-[2vw] rounded-[5px] w-[10vw] text-[1.5vw] font-bold hover:bg-[#ff3122] hover:border-black border-4'
+      
+      >Click me</button>
+
+    </form>
+    <hr></hr>
+    <div className='bg-slate-200 p-8'>
+      <ul>
+        {renderTask}
+      </ul>
     </div>
-  );
+    </>
+  )
 }
+
+export default page
